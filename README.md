@@ -49,15 +49,30 @@ npm install
 
 #### Inicie o PostgreSQL com Docker:
 
+Você pode rodar o PostgreSQL de duas formas:
+
+🔹 Usando Docker (sem docker-compose):
+
 ```bash
-docker-compose up -d
+docker run --name futebol_db \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=futebol \
+  -p 5432:5432 \
+  -d postgres
 ```
 
 Isso irá:
+- Criar um container PostgreSQL chamado futebol_db
+- Usuário: postgres
+- Senha: postgres
+- Banco: futebol
+- Porta exposta: 5432
 
-- Criar um container PostgreSQL na porta **5433**
-- Configurar usuário: `admin`, senha: `admin`
-- Criar banco de dados: `clinica`
+🔹 Ou usando PostgreSQL instalado localmente:
+
+Certifique-se de que o serviço esteja rodando na porta 5432, e que o usuário/senha correspondam ao seu .env.
+
 
 #### Verifique se o container está rodando:
 
