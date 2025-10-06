@@ -35,7 +35,7 @@ Uma API REST completa para gerenciamento de times de futebol, jogadores, partida
 ### 1️⃣ **Clone o Repositório**
 
 ```bash
-git clone https://github.com/douglasmeneses/clinica-api.git
+git clone https://github.com/milenazevedo/futebol-api.git
 cd clinica-api
 ```
 
