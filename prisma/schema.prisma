@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Time {
+  id         Int         @id @default(autoincrement())
+  nome       String
+  fundacao   DateTime?
+  jogadores  Jogador[]
+  escalacoes Escalacao[]
+
+  partidasMandante Partida[] @relation("PartidaMandante")
+  partidasVisitante Partida[] @relation("PartidaVisitante")
+}
+
+model Jogador {
+  id        Int       @id @default(autoincrement())
+  nome      String
+  posicao   String
+  numero    Int
+  timeId    Int
+  time      Time      @relation(fields: [timeId], references: [id])
+  escalacoes Escalacao[]
+}
+
+model Partida {
+  id          Int         @id @default(autoincrement())
+  data        DateTime
+  local       String
+  mandanteId  Int
+  visitanteId Int
+
+  mandante    Time        @relation("PartidaMandante", fields: [mandanteId], references: [id])
+  visitante   Time        @relation("PartidaVisitante", fields: [visitanteId], references: [id])
+  escalacoes  Escalacao[]
+}
+
+model Escalacao {
+  id        Int      @id @default(autoincrement())
+  jogadorId Int
+  partidaId Int
+  timeId    Int
+
+  jogador   Jogador  @relation(fields: [jogadorId], references: [id])
+  partida   Partida  @relation(fields: [partidaId], references: [id])
+  time      Time     @relation(fields: [timeId], references: [id])
+}
