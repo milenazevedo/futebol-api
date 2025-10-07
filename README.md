@@ -2,6 +2,8 @@
 
 Uma API REST completa para gerenciamento de times de futebol, jogadores, partidas e escalações, construída com Node.js, TypeScript, Prisma e PostgreSQL.
 
+# video da api aqui : https://youtu.be/6BmWTWB7tnI?si=Mqqe0E1dFvjgiuMR
+
 ## 📋 Funcionalidades
 
 - ✅ **Gerenciamento de Times** – CRUD completo
@@ -343,3 +345,4 @@ npm run prisma:generate  # Gera Prisma Client
 npm run prisma:migrate   # Executa migrações
 npm run prisma:studio    # Abre Prisma Studio
 ```
+
