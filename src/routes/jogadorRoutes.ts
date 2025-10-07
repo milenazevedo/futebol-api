@@ -22,6 +22,7 @@ const router = Router();
  *       200:
  *         description: Lista de jogadores
  */
+// ROTA: GET /api/jogadores - Lista todos os jogadores
 router.get("/", jogadorController.getAllJogadores);
 
 /**
@@ -42,6 +43,7 @@ router.get("/", jogadorController.getAllJogadores);
  *       404:
  *         description: Jogador não encontrado
  */
+// ROTA: GET /api/jogadores/:id - Busca jogador por ID
 router.get("/:id", validateParams(idParamSchema), jogadorController.getJogadorById);
 
 /**
@@ -69,6 +71,7 @@ router.get("/:id", validateParams(idParamSchema), jogadorController.getJogadorBy
  *       201:
  *         description: Jogador criado com sucesso
  */
+// ROTA: POST /api/jogadores - Cria novo jogador
 router.post("/", validateBody(createJogadorSchema), jogadorController.createJogador);
 
 /**
@@ -104,6 +107,7 @@ router.post("/", validateBody(createJogadorSchema), jogadorController.createJoga
  *       404:
  *         description: Jogador não encontrado
  */
+// ROTA: PUT /api/jogadores/:id - Atualiza jogador existente
 router.put(
   "/:id",
   validateParams(idParamSchema),
@@ -129,6 +133,7 @@ router.put(
  *       404:
  *         description: Jogador não encontrado
  */
+// ROTA: DELETE /api/jogadores/:id - Remove jogador
 router.delete("/:id", validateParams(idParamSchema), jogadorController.deleteJogador);
 
 export default router;

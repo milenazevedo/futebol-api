@@ -22,6 +22,7 @@ const router = Router();
  *       200:
  *         description: Lista de escalações
  */
+// ROTA: GET /api/escalacoes - Lista todas as escalações
 router.get("/", escalacaoController.getAllEscalacoes);
 
 /**
@@ -42,6 +43,7 @@ router.get("/", escalacaoController.getAllEscalacoes);
  *       404:
  *         description: Escalação não encontrada
  */
+// ROTA: GET /api/escalacoes/:id - Busca escalação por ID
 router.get("/:id", validateParams(idParamSchema), escalacaoController.getEscalacaoById);
 
 /**
@@ -67,6 +69,7 @@ router.get("/:id", validateParams(idParamSchema), escalacaoController.getEscalac
  *       201:
  *         description: Escalação criada com sucesso
  */
+// ROTA: POST /api/escalacoes - Cria nova escalação
 router.post("/", validateBody(createEscalacaoSchema), escalacaoController.createEscalacao);
 
 /**
@@ -100,6 +103,7 @@ router.post("/", validateBody(createEscalacaoSchema), escalacaoController.create
  *       404:
  *         description: Escalação não encontrada
  */
+// ROTA: PUT /api/escalacoes/:id - Atualiza escalação existente
 router.put(
   "/:id",
   validateParams(idParamSchema),
@@ -125,6 +129,7 @@ router.put(
  *       404:
  *         description: Escalação não encontrada
  */
+// ROTA: DELETE /api/escalacoes/:id - Remove escalação
 router.delete("/:id", validateParams(idParamSchema), escalacaoController.deleteEscalacao);
 
 export default router;

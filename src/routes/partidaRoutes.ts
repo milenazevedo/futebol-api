@@ -22,6 +22,7 @@ const router = Router();
  *       200:
  *         description: Lista de partidas
  */
+// ROTA: GET /api/partidas - Lista todas as partidas
 router.get("/", partidaController.getAllPartidas);
 
 /**
@@ -42,6 +43,7 @@ router.get("/", partidaController.getAllPartidas);
  *       404:
  *         description: Partida não encontrada
  */
+// ROTA: GET /api/partidas/:id - Busca partida por ID
 router.get("/:id", validateParams(idParamSchema), partidaController.getPartidaById);
 
 /**
@@ -70,6 +72,7 @@ router.get("/:id", validateParams(idParamSchema), partidaController.getPartidaBy
  *       201:
  *         description: Partida criada com sucesso
  */
+// ROTA: POST /api/partidas - Cria nova partida
 router.post("/", validateBody(createPartidaSchema), partidaController.createPartida);
 
 /**
@@ -106,6 +109,7 @@ router.post("/", validateBody(createPartidaSchema), partidaController.createPart
  *       404:
  *         description: Partida não encontrada
  */
+// ROTA: PUT /api/partidas/:id - Atualiza partida existente
 router.put(
   "/:id",
   validateParams(idParamSchema),
@@ -131,6 +135,7 @@ router.put(
  *       404:
  *         description: Partida não encontrada
  */
+// ROTA: DELETE /api/partidas/:id - Remove partida
 router.delete("/:id", validateParams(idParamSchema), partidaController.deletePartida);
 
 export default router;

@@ -22,6 +22,7 @@ const router = Router();
  *       200:
  *         description: Lista de times
  */
+// ROTA: GET /api/times - Lista todos os times
 router.get("/", timeController.getAllTimes);
 
 /**
@@ -42,6 +43,7 @@ router.get("/", timeController.getAllTimes);
  *       404:
  *         description: Time não encontrado
  */
+// ROTA: GET /api/times/:id - Busca time por ID
 router.get("/:id", validateParams(idParamSchema), timeController.getTimeById);
 
 /**
@@ -66,6 +68,7 @@ router.get("/:id", validateParams(idParamSchema), timeController.getTimeById);
  *       201:
  *         description: Time criado com sucesso
  */
+// ROTA: POST /api/times - Cria novo time
 router.post("/", validateBody(createTimeSchema), timeController.createTime);
 
 /**
@@ -98,10 +101,11 @@ router.post("/", validateBody(createTimeSchema), timeController.createTime);
  *       404:
  *         description: Time não encontrado
  */
+// ROTA: PUT /api/times/:id - Atualiza time existente
 router.put(
   "/:id",
-  validateParams(idParamSchema),
-  validateBody(updateTimeSchema),
+  validateParams(idParamSchema),      // Valida o ID na URL
+  validateBody(updateTimeSchema),     // Valida o body da requisição
   timeController.updateTime
 );
 
@@ -123,6 +127,7 @@ router.put(
  *       404:
  *         description: Time não encontrado
  */
+// ROTA: DELETE /api/times/:id - Remove time
 router.delete("/:id", validateParams(idParamSchema), timeController.deleteTime);
 
 export default router;

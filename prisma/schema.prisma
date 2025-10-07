@@ -1,51 +1,60 @@
+// Gera o cliente Prisma em JavaScript/TypeScript
 generator client {
   provider = "prisma-client-js"
 }
 
+// Configuração da fonte de dados - usa PostgreSQL
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL") // URL do banco vinda da variável de ambiente
 }
 
+// MODELO: Time - Representa um time de futebol
 model Time {
-  id         Int         @id @default(autoincrement())
-  nome       String
-  fundacao   DateTime?
-  jogadores  Jogador[]
-  escalacoes Escalacao[]
+  id         Int         @id @default(autoincrement()) // ID único, auto incrementável
+  nome       String      // Nome do time (ex: Flamengo, Corinthians)
+  fundacao   DateTime?   // Data de fundação (opcional)
+  jogadores  Jogador[]   // Relacionamento: lista de jogadores do time
+  escalacoes Escalacao[] // Relacionamento: lista de escalações do time
 
+  // Relacionamentos para partidas como mandante e visitante
   partidasMandante Partida[] @relation("PartidaMandante")
   partidasVisitante Partida[] @relation("PartidaVisitante")
 }
 
+// MODELO: Jogador - Representa um jogador de futebol
 model Jogador {
   id        Int       @id @default(autoincrement())
-  nome      String
-  posicao   String
-  numero    Int
-  timeId    Int
-  time      Time      @relation(fields: [timeId], references: [id])
-  escalacoes Escalacao[]
+  nome      String    // Nome completo do jogador
+  posicao   String    // Posição em campo (ex: Atacante, Goleiro)
+  numero    Int       // Número da camisa
+  timeId    Int       // Chave estrangeira para o time
+  time      Time      @relation(fields: [timeId], references: [id]) // Relacionamento com Time
+  escalacoes Escalacao[] // Relacionamento: lista de escalações do jogador
 }
 
+// MODELO: Partida - Representa uma partida de futebol
 model Partida {
   id          Int         @id @default(autoincrement())
-  data        DateTime
-  local       String
-  mandanteId  Int
-  visitanteId Int
+  data        DateTime    // Data e hora da partida
+  local       String      // Local onde a partida será realizada
+  mandanteId  Int         // ID do time mandante
+  visitanteId Int         // ID do time visitante
 
+  // Relacionamentos com times (mandante e visitante)
   mandante    Time        @relation("PartidaMandante", fields: [mandanteId], references: [id])
   visitante   Time        @relation("PartidaVisitante", fields: [visitanteId], references: [id])
-  escalacoes  Escalacao[]
+  escalacoes  Escalacao[] // Relacionamento: lista de escalações da partida
 }
 
+// MODELO: Escalacao - Representa a escalação de um jogador em uma partida
 model Escalacao {
   id        Int      @id @default(autoincrement())
-  jogadorId Int
-  partidaId Int
-  timeId    Int
+  jogadorId Int      // ID do jogador escalado
+  partidaId Int      // ID da partida
+  timeId    Int      // ID do time
 
+  // Relacionamentos com Jogador, Partida e Time
   jogador   Jogador  @relation(fields: [jogadorId], references: [id])
   partida   Partida  @relation(fields: [partidaId], references: [id])
   time      Time     @relation(fields: [timeId], references: [id])

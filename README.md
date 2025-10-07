@@ -80,6 +80,14 @@ Certifique-se de que o serviço esteja rodando na porta 5432, e que o usuário/s
 docker ps
 ```
 
+🔹 Ou usando Docker Compose (recomendado, já incluído no projeto):
+
+```bash
+docker compose up -d
+```
+
+Isso criará um container `futebol_db` com usuário `postgres` e senha `postgres` e exporá a porta 5432.
+
 ### 4️⃣ **Configure as Variáveis de Ambiente**
 
 O arquivo `.env` já está configurado:
@@ -112,12 +120,51 @@ npm start
 
 A aplicação estará disponível em: **http://localhost:3000**
 
+### Health check
+
+Há um endpoint de checagem rápida:
+
+- GET http://localhost:3000/api/health — retorna 200 quando o servidor e o banco estão acessíveis, ou 503 se o banco estiver inacessível.
+
+### Script de verificação rápida
+
+Incluí um script para testar a criação de um Time e um Jogador localmente:
+
+```bash
+node scripts/smokeTest.js
+```
+
+Ele espera que a API esteja rodando em `http://localhost:3000`.
+
 ## 📚 Documentação da API
 
 ### **Swagger UI**
 
 Acesse a documentação interativa em:
 **http://localhost:3000/docs**
+
+OBS: Plataformas externas (como o SwaggerHub) não conseguem por padrão buscar `http://localhost:3000/docs` do seu computador — por isso você pode receber um erro como "Failed to download" ou status 403.
+
+Opções para importar a especificação no SwaggerHub:
+
+1) Baixar o JSON localmente e importar manualmente
+
+  - Abra: http://localhost:3000/openapi.json ou http://localhost:3000/docs.json
+  - Salve o conteúdo como `openapi.json` e faça upload no SwaggerHub (Import > File).
+
+2) Expor temporariamente sua API para a internet (recomendado para testes rápidos)
+
+  - Instale e execute ngrok (https://ngrok.com):
+
+    ```bash
+    ngrok http 3000
+    ```
+
+  - Copie o URL público (ex.: `https://abcd1234.ngrok.io`) e no SwaggerHub use a opção Import from URL com `https://abcd1234.ngrok.io/openapi.json`.
+
+3) Use uma URL pública já hospedada (deploy) e aponte o SwaggerHub para `https://sua-url/openapi.json`.
+
+Qualquer uma dessas opções permitirá que o SwaggerHub importe corretamente a especificação sem retornar 403.
 
 ### **Endpoints Principais**
 
