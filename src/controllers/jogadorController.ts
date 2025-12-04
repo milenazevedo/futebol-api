@@ -19,6 +19,28 @@ export const searchJogadores = async (req: Request, res: Response): Promise<Resp
   }
 };
 
+export const searchByName = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { nome } = req.query;
+    const jogadores = await jogadorService.searchByName(nome as string);
+    return res.json(jogadores);
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getJogadorStats = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { id } = idParamSchema.parse(req.params);
+    const stats = await jogadorService.getStats(id);
+    if (!stats) return res.status(404).json({ message: "Jogador não encontrado" });
+    return res.json(stats);
+  } catch (error: any) {
+    if (error.errors) return res.status(400).json({ errors: error.errors });
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 export const createJogador = async (req: Request, res: Response): Promise<Response> => {
   try {
     const payload = createJogadorSchema.parse(req.body);

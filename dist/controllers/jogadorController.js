@@ -1,4 +1,5 @@
 "use strict";
+// src/controllers/jogadorController.ts
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -32,60 +33,54 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteJogador = exports.updateJogador = exports.getJogadorById = exports.getAllJogadores = exports.createJogador = void 0;
+exports.deleteJogador = exports.updateJogador = exports.getJogadorById = exports.getAllJogadores = exports.createJogador = exports.searchJogadores = void 0;
 const jogadorService = __importStar(require("../services/jogadorService"));
 const validation_1 = require("../schemas/validation");
 // CONTROLLER: Lida com as requisições HTTP para Jogadores
-const createJogador = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const searchJogadores = async (req, res) => {
     try {
-        // Valida os dados do body usando Zod
+        const { posicao, subposicao } = validation_1.searchJogadorSchema.parse(req.query);
+        const jogadores = await jogadorService.search(posicao, subposicao);
+        return res.json(jogadores);
+    }
+    catch (error) {
+        if (error.errors) {
+            return res.status(400).json({ errors: error.errors });
+        }
+        return res.status(500).json({ message: error.message });
+    }
+};
+exports.searchJogadores = searchJogadores;
+const createJogador = async (req, res) => {
+    try {
         const payload = validation_1.createJogadorSchema.parse(req.body);
-        // Chama o serviço para criar o jogador
-        const novo = yield jogadorService.create(payload);
-        // Retorna resposta 201 (Created) com o jogador criado
+        const novo = await jogadorService.create(payload);
         return res.status(201).json(novo);
     }
     catch (error) {
-        // Se for erro de validação Zod, retorna 400
         if (error.errors)
             return res.status(400).json({ errors: error.errors });
-        // Outros erros retornam 500
         return res.status(500).json({ message: error.message });
     }
-});
+};
 exports.createJogador = createJogador;
-const getAllJogadores = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllJogadores = async (req, res) => {
     try {
-        // Busca todos os jogadores
-        const lista = yield jogadorService.getAll();
-        // Retorna a lista de jogadores
+        const lista = await jogadorService.getAll();
         return res.json(lista);
     }
     catch (error) {
         return res.status(500).json({ message: error.message });
     }
-});
+};
 exports.getAllJogadores = getAllJogadores;
-const getJogadorById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getJogadorById = async (req, res) => {
     try {
-        // Valida o ID nos parâmetros da URL
         const { id } = validation_1.idParamSchema.parse(req.params);
-        // Busca o jogador pelo ID
-        const jogador = yield jogadorService.getById(id);
-        // Se jogador não foi encontrado, retorna 404
+        const jogador = await jogadorService.getById(id);
         if (!jogador)
             return res.status(404).json({ message: "Jogador não encontrado" });
-        // Retorna o jogador encontrado
         return res.json(jogador);
     }
     catch (error) {
@@ -93,33 +88,28 @@ const getJogadorById = (req, res) => __awaiter(void 0, void 0, void 0, function*
             return res.status(400).json({ errors: error.errors });
         return res.status(500).json({ message: error.message });
     }
-});
+};
 exports.getJogadorById = getJogadorById;
-const updateJogador = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateJogador = async (req, res) => {
     try {
-        // Valida o ID e os dados do body
         const { id } = validation_1.idParamSchema.parse(req.params);
         const payload = validation_1.updateJogadorSchema.parse(req.body);
-        // Chama o serviço para atualizar
-        const atualizado = yield jogadorService.update(id, payload);
+        const atualizado = await jogadorService.update(id, payload);
         return res.json(atualizado);
     }
     catch (error) {
         if (error.errors)
             return res.status(400).json({ errors: error.errors });
-        // Erro específico do Prisma quando registro não existe
         if (error.code === "P2025")
             return res.status(404).json({ message: "Jogador não encontrado" });
         return res.status(500).json({ message: error.message });
     }
-});
+};
 exports.updateJogador = updateJogador;
-const deleteJogador = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteJogador = async (req, res) => {
     try {
         const { id } = validation_1.idParamSchema.parse(req.params);
-        // Remove o jogador
-        yield jogadorService.remove(id);
-        // Retorna 204 (No Content) - sucesso sem conteúdo na resposta
+        await jogadorService.remove(id);
         return res.status(204).send();
     }
     catch (error) {
@@ -127,5 +117,5 @@ const deleteJogador = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             return res.status(404).json({ message: "Jogador não encontrado" });
         return res.status(500).json({ message: error.message });
     }
-});
+};
 exports.deleteJogador = deleteJogador;

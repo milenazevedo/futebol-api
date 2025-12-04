@@ -82,3 +82,21 @@ export const deletePartida = async (req: Request, res: Response) => {
     return res.status(500).json({ mensagem: error.message });
   }
 };
+
+export const getFuturePartidas = async (_req: Request, res: Response) => {
+  try {
+    const partidas = await partidaService.getFutureMatches();
+    return res.json(partidas);
+  } catch (error: any) {
+    return res.status(500).json({ mensagem: error.message });
+  }
+};
+
+export const getPartidaStats = async (_req: Request, res: Response) => {
+  try {
+    const stats = await partidaService.getStats();
+    return res.json(stats);
+  } catch (error: any) {
+    return res.status(500).json({ mensagem: error.message });
+  }
+};

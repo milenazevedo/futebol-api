@@ -30,6 +30,7 @@ Uma API REST completa para gerenciamento de times de futebol, jogadores, partida
 ### 📋 Pré-requisitos
 
 - **Docker** e **Docker Compose**
+- **Node.js 18+** e **npm** (para rodar frontend local)
 - **Git**
 
 ### 1️⃣ **Clone o Repositório**
@@ -39,28 +40,43 @@ git clone https://github.com/milenazevedo/futebol-api.git
 cd futebol-api
 ```
 
-### 2️⃣ **Execute com Docker (Recomendado)**
+### 2️⃣ **Execute o Backend com Docker**
 
-#### 🔹 Opção 1: Desenvolvimento (com hot-reload)
+#### 🔹 Desenvolvimento (com hot-reload)
 
 ```bash
-# Build e execução dos containers
+# Build e execução dos containers (backend + banco de dados)
 docker-compose up --build
 
 # Ou para rodar em background:
 docker-compose up -d --build
 ```
 
-#### 🔹 Opção 2: Produção
+#### 🔹 Produção
 
 ```bash
 # Build para produção
 docker-compose -f docker-compose.prod.yml up --build
 ```
 
-### 3️⃣ **Acesse a Aplicação**
+### 3️⃣ **Execute o Frontend (Em outro terminal)**
 
-A aplicação estará disponível em: **http://localhost:3000**
+```bash
+# Navegue até a pasta do cliente
+cd client
+
+# Instale as dependências
+npm install
+
+# Rode o servidor de desenvolvimento
+npm run dev
+```
+
+### 4️⃣ **Acesse a Aplicação**
+
+- **Frontend**: http://localhost:5173 ou http://localhost:5174
+- **Backend API**: http://localhost:3000
+- **Documentação Swagger**: http://localhost:3000/docs
 
 ### 📊 Status dos Serviços
 
@@ -154,6 +170,9 @@ Acesse a documentação interativa em:
 #### **👤 Jogadores**
 - `POST /api/jogadores` – Criar jogador
 - `GET /api/jogadores` – Listar todos os jogadores
+- `GET /api/jogadores/search` – Buscar jogadores por posição
+- `GET /api/jogadores/buscar/nome` – Buscar jogador por nome
+- `GET /api/jogadores/stats/:id` – Obter estatísticas do jogador
 - `GET /api/jogadores/:id` – Buscar jogador por ID
 - `PUT /api/jogadores/:id` – Atualizar jogador
 - `DELETE /api/jogadores/:id` – Deletar jogador
@@ -161,6 +180,8 @@ Acesse a documentação interativa em:
 #### **⚽ Partidas**
 - `POST /api/partidas` – Criar partida
 - `GET /api/partidas` – Listar todas as partidas
+- `GET /api/partidas/futuras` – Listar partidas futuras
+- `GET /api/partidas/stats` – Obter estatísticas das partidas
 - `GET /api/partidas/:id` – Buscar partida por ID
 - `PUT /api/partidas/:id` – Atualizar partida
 - `DELETE /api/partidas/:id` – Deletar partida
@@ -172,9 +193,19 @@ Acesse a documentação interativa em:
 - `PUT /api/escalacoes/:id` – Atualizar escalação
 - `DELETE /api/escalacoes/:id` – Deletar escalação
 
-## 🧪 Testando a API
+## 🧪 Testando a Aplicação
 
-### **Usando Swagger (Recomendado)**
+### **Frontend**
+
+1. Acesse: **http://localhost:5173** ou **http://localhost:5174**
+2. A aplicação carregará com as seguintes páginas:
+   - **Home** – Botões de navegação para os módulos
+   - **Jogadores** – CRUD completo, busca por nome e visualização de estatísticas
+   - **Times** – CRUD completo
+   - **Partidas** – CRUD completo, filtro de partidas futuras e estatísticas
+   - **Escalações** – CRUD completo com seleção de jogadores, times e partidas
+
+### **Backend via Swagger (Recomendado)**
 
 1. Acesse: **http://localhost:3000/docs**
 2. Clique em qualquer endpoint
@@ -205,9 +236,29 @@ curl -X POST http://localhost:3000/api/jogadores \
   }'
 ```
 
-## ⚙️ Comandos Docker Úteis
+#### Buscar Jogador por Nome:
+```bash
+curl http://localhost:3000/api/jogadores/buscar/nome?nome=Gabriel
+```
 
-### **Gerenciamento de Containers**
+#### Obter Estatísticas do Jogador:
+```bash
+curl http://localhost:3000/api/jogadores/stats/1
+```
+
+#### Listar Partidas Futuras:
+```bash
+curl http://localhost:3000/api/partidas/futuras
+```
+
+#### Obter Estatísticas de Partidas:
+```bash
+curl http://localhost:3000/api/partidas/stats
+```
+
+## ⚙️ Comandos Úteis
+
+### **Docker (Backend + Banco de Dados)**
 
 ```bash
 # Iniciar aplicação
@@ -226,13 +277,29 @@ docker-compose logs db
 docker-compose exec app npm run prisma:studio
 ```
 
+### **Frontend**
+
+```bash
+# Instalar dependências
+npm install
+
+# Desenvolvimento (com hot reload)
+npm run dev
+
+# Build para produção
+npm run build
+
+# Preview de produção
+npm run preview
+```
+
 ### **Banco de Dados**
 
 ```bash
 # Executar migrações
 docker-compose exec app npx prisma migrate dev
 
-# Abrir Prisma Studio
+# Abrir Prisma Studio (interface visual do banco)
 docker-compose exec app npx prisma studio
 
 # Backup do banco
@@ -244,9 +311,9 @@ docker-compose exec db pg_dump -U postgres futebol > backup.sql
 ### **Pré-requisitos Adicionais**
 - Node.js 18+
 - npm ou yarn
-- PostgreSQL
+- PostgreSQL rodando localmente
 
-### **Configuração**
+### **Configuração Backend**
 
 ```bash
 # Instalar dependências
@@ -254,17 +321,39 @@ npm install
 
 # Configurar variáveis de ambiente
 cp .env.example .env
+# Editar .env com suas configurações de banco de dados
+
+# Gerar cliente Prisma
+npx prisma generate
 
 # Executar migrações
-npx prisma generate
 npx prisma migrate dev
 
-# Desenvolvimento
+# Desenvolvimento (hot reload)
 npm run dev
 
 # Produção
 npm run build
 npm start
+```
+
+### **Configuração Frontend**
+
+```bash
+# Navegue até a pasta do cliente
+cd client
+
+# Instale as dependências
+npm install
+
+# Desenvolvimento (hot reload)
+npm run dev
+
+# Build para produção
+npm run build
+
+# Preview
+npm run preview
 ```
 
 ## 🐛 Solução de Problemas

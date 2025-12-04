@@ -42,15 +42,22 @@ model Partida {
 }
 
 model Escalacao {
-  id       Int
+  id       Int      @id @default(autoincrement())
   jogadorId Int
   partidaId Int
   timeId    Int
   jogador   Jogador   @relation(fields: [jogadorId], references: [id])
   partida   Partida   @relation(fields: [partidaId], references: [id])
   time      Time      @relation(fields: [timeId], references: [id])
+}
 
-  @@id([jogadorId, partidaId, timeId])
+model Usuario {
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  senha     String  // bcrypt hashed password
+  nome      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 

@@ -1,4 +1,5 @@
 "use strict";
+// src/routes/jogadorRoutes.ts
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -35,127 +36,40 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const jogadorController = __importStar(require("../controllers/jogadorController"));
-const validation_1 = require("../schemas/validation");
-const validation_2 = require("../middlewares/validation");
+const validation_1 = require("../middlewares/validation");
+const validation_2 = require("../schemas/validation");
 const router = (0, express_1.Router)();
-/**
- * @swagger
- * tags:
- *   name: Jogadores
- *   description: Endpoints de gerenciamento de jogadores
- */
-/**
- * @swagger
- * /jogadores:
- *   get:
- *     summary: Retorna todos os jogadores
- *     tags: [Jogadores]
- *     responses:
- *       200:
- *         description: Lista de jogadores
- */
 // ROTA: GET /api/jogadores - Lista todos os jogadores
-router.get("/", jogadorController.getAllJogadores);
+router.get('/', jogadorController.getAllJogadores);
 /**
  * @swagger
- * /jogadores/{id}:
+ * /jogadores/search:
  *   get:
- *     summary: Retorna um jogador pelo ID
+ *     summary: Busca jogadores por posição e/ou subposição
  *     tags: [Jogadores]
  *     parameters:
- *       - in: path
- *         name: id
- *         required: true
+ *       - in: query
+ *         name: posicao
  *         schema:
- *           type: integer
+ *           type: string
+ *         description: Posição do jogador (ex: "Atacante")
+ *       - in: query
+ *         name: subposicao
+ *         schema:
+ *           type: string
+ *         description: Subposição do jogador (ex: "Centroavante")
  *     responses:
  *       200:
- *         description: Jogador encontrado
- *       404:
- *         description: Jogador não encontrado
+ *         description: Lista de jogadores encontrados
  */
+// ROTA: GET /api/jogadores/search - Busca jogadores por posição e/ou subposição
+router.get('/search', (0, validation_1.validateQuery)(validation_2.searchJogadorSchema), jogadorController.searchJogadores);
 // ROTA: GET /api/jogadores/:id - Busca jogador por ID
-router.get("/:id", (0, validation_2.validateParams)(validation_1.idParamSchema), jogadorController.getJogadorById);
-/**
- * @swagger
- * /jogadores:
- *   post:
- *     summary: Cria um novo jogador
- *     tags: [Jogadores]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               nome:
- *                 type: string
- *               posicao:
- *                 type: string
- *               numero:
- *                 type: integer
- *               timeId:
- *                 type: integer
- *     responses:
- *       201:
- *         description: Jogador criado com sucesso
- */
+router.get('/:id', jogadorController.getJogadorById);
 // ROTA: POST /api/jogadores - Cria novo jogador
-router.post("/", (0, validation_2.validateBody)(validation_1.createJogadorSchema), jogadorController.createJogador);
-/**
- * @swagger
- * /jogadores/{id}:
- *   put:
- *     summary: Atualiza um jogador existente
- *     tags: [Jogadores]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               nome:
- *                 type: string
- *               posicao:
- *                 type: string
- *               numero:
- *                 type: integer
- *               timeId:
- *                 type: integer
- *     responses:
- *       200:
- *         description: Jogador atualizado
- *       404:
- *         description: Jogador não encontrado
- */
+router.post('/', jogadorController.createJogador);
 // ROTA: PUT /api/jogadores/:id - Atualiza jogador existente
-router.put("/:id", (0, validation_2.validateParams)(validation_1.idParamSchema), (0, validation_2.validateBody)(validation_1.updateJogadorSchema), jogadorController.updateJogador);
-/**
- * @swagger
- * /jogadores/{id}:
- *   delete:
- *     summary: Remove um jogador
- *     tags: [Jogadores]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       204:
- *         description: Jogador removido com sucesso
- *       404:
- *         description: Jogador não encontrado
- */
+router.put('/:id', jogadorController.updateJogador);
 // ROTA: DELETE /api/jogadores/:id - Remove jogador
-router.delete("/:id", (0, validation_2.validateParams)(validation_1.idParamSchema), jogadorController.deleteJogador);
+router.delete('/:id', jogadorController.deleteJogador);
 exports.default = router;

@@ -20,6 +20,44 @@ export async function search(posicao?: string, subposicao?: string): Promise<any
   });
 }
 
+export async function searchByName(nome?: string): Promise<any[]> {
+  const where: any = {};
+
+  if (nome) {
+    where.nome = { contains: nome, mode: 'insensitive' };
+  }
+
+  return prisma.jogador.findMany({
+    where,
+    include: { time: true },
+  });
+}
+
+export async function getStats(id: number): Promise<any> {
+  const jogador = await prisma.jogador.findUnique({
+    where: { id },
+    include: {
+      time: true,
+      escalacoes: {
+        include: { partida: true },
+      },
+    },
+  });
+
+  if (!jogador) return null;
+
+  const totalPartidas = jogador.escalacoes?.length || 0;
+  
+  return {
+    ...jogador,
+    stats: {
+      totalPartidas,
+      posicao: jogador.posicao,
+      numero: jogador.numero,
+    },
+  };
+}
+
 export async function create(data: any): Promise<any> {
   return prisma.jogador.create({ data });
 }
