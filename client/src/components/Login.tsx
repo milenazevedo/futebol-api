@@ -149,9 +149,6 @@ const NeonCircularProgress = styled(CircularProgress)({
 // ===================================================================
 // SUA LÓGICA ORIGINAL (Nenhuma alteração aqui)
 // ===================================================================
-const emailSchema = z.email();
-const passwordSchema = z.string().min(4);
-
 function Login() {
   const navigate = useNavigate();
   const { setUsuario } = useAuth();
