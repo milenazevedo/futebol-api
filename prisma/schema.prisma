@@ -1,0 +1,148 @@
+<<<<<<< HEAD
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Time {
+  id         Int      @id @default(autoincrement())
+  nome       String
+  fundacao   DateTime?
+  jogadores  Jogador[]
+  partidasM  Partida[] @relation("Mandante")
+  partidasV  Partida[] @relation("Visitante")
+  escalacoes Escalacao[]
+}
+
+model Jogador {
+  id         Int      @id @default(autoincrement())
+  nome       String
+  posicao    String
+  subposicao String?  // Campo opcional para subposição
+  numero     Int
+  timeId     Int
+  time       Time     @relation(fields: [timeId], references: [id])
+  escalacoes Escalacao[]
+}
+
+model Partida {
+  id         Int       @id @default(autoincrement())
+  data       DateTime
+  local      String
+  mandanteId Int
+  visitanteId Int
+  mandante   Time      @relation("Mandante", fields: [mandanteId], references: [id])
+  visitante  Time      @relation("Visitante", fields: [visitanteId], references: [id])
+  escalacoes Escalacao[]
+}
+
+model Escalacao {
+  id       Int
+  jogadorId Int
+  partidaId Int
+  timeId    Int
+  jogador   Jogador   @relation(fields: [jogadorId], references: [id])
+  partida   Partida   @relation(fields: [partidaId], references: [id])
+  time      Time      @relation(fields: [timeId], references: [id])
+
+  @@id([jogadorId, partidaId, timeId])
+}
+
+
+=======
+// Gera o cliente Prisma em JavaScript/TypeScript
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Configuração da fonte de dados - usa PostgreSQL
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==========================
+// MODELO: Time
+// ==========================
+model Time {
+  id       Int       @id @default(autoincrement())
+  nome     String
+  fundacao DateTime?
+
+  jogadores  Jogador[]
+  escalacoes Escalacao[]
+
+  // Relações com Partida — corrigidas
+  partidasMandante  Partida[] @relation("PartidaMandante")
+  partidasVisitante Partida[] @relation("PartidaVisitante")
+}
+
+// ==========================
+// MODELO: Jogador
+// ==========================
+model Jogador {
+  id      Int    @id @default(autoincrement())
+  nome    String
+  posicao String
+  numero  Int
+  timeId  Int
+
+  time       Time        @relation(fields: [timeId], references: [id])
+  escalacoes Escalacao[]
+}
+
+// ==========================
+// MODELO: Partida
+// ==========================
+model Partida {
+  id    Int      @id @default(autoincrement())
+  data  DateTime
+  local String
+
+  mandanteId  Int
+  visitanteId Int
+
+  // Campos adicionados
+  golsMandante  Int?
+  golsVisitante Int?
+
+  // Relações — corrigidas
+  mandante  Time @relation("PartidaMandante", fields: [mandanteId], references: [id])
+  visitante Time @relation("PartidaVisitante", fields: [visitanteId], references: [id])
+
+  escalacoes Escalacao[]
+
+  createdAt DateTime @default(now())
+}
+
+// ==========================
+// MODELO: Escalacao
+// ==========================
+model Escalacao {
+  id        Int @id @default(autoincrement())
+  jogadorId Int
+  partidaId Int
+  timeId    Int
+
+  jogador Jogador @relation(fields: [jogadorId], references: [id])
+  partida Partida @relation(fields: [partidaId], references: [id])
+  time    Time    @relation(fields: [timeId], references: [id])
+}
+
+// ==========================
+// MODELO: User
+// ==========================
+model User {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String   @unique
+  senha     String
+  createdAt DateTime @default(now())
+}
+>>>>>>> Parte-Milena

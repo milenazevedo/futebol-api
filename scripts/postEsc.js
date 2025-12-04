@@ -1,0 +1,5 @@
+<<<<<<< HEAD
+const http=require('http'); const payload=JSON.stringify({ jogadorId:1, partidaId:1, timeId:10 }); const opts={hostname:'localhost',port:3000,path:'/api/escalacoes',method:'POST',headers:{'Content-Type':'application/json','Content-Length':Buffer.byteLength(payload)}}; const req=http.request(opts,res=>{console.log('status',res.statusCode);res.setEncoding('utf8');res.on('data',d=>console.log('body',d));}); req.on('error',e=>console.error('err',e)); req.write(payload); req.end();
+=======
+const http=require('http'); const payload=JSON.stringify({ jogadorId:1, partidaId:1, timeId:10 }); const opts={hostname:'localhost',port:3000,path:'/api/escalacoes',method:'POST',headers:{'Content-Type':'application/json','Content-Length':Buffer.byteLength(payload)}}; const req=http.request(opts,res=>{console.log('status',res.statusCode);res.setEncoding('utf8');res.on('data',d=>console.log('body',d));}); req.on('error',e=>console.error('err',e)); req.write(payload); req.end();
+>>>>>>> Parte-Milena
