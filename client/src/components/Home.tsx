@@ -1,4 +1,4 @@
-import { Box, Button, Paper, Typography, Avatar } from "@mui/material";
+import { Box, Button, Paper, Typography, Avatar, AppBar, Toolbar, Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import UserHeader from "./UserHeader";
 
@@ -7,20 +7,31 @@ const AVATAR_SIZE = 72;
 const Home: React.FC = () => {
   const navigate = useNavigate();
   return (
-    <Box position="relative" minHeight="100vh" width="100vw">
-      <UserHeader />
+    <Box minHeight="100vh" display="flex" flexDirection="column">
+      {/* Navbar */}
+      <AppBar position="static" color="primary" elevation={2}>
+        <Toolbar>
+          <Typography variant="h5" component="h1" sx={{ fontWeight: 700, flexGrow: 1 }}>
+            The Heroes
+          </Typography>
+          <UserHeader />
+        </Toolbar>
+      </AppBar>
+
+      {/* Conteúdo Principal */}
       <Box
+        flex={1}
         display="flex"
         justifyContent="center"
         alignItems="center"
-        minHeight="100vh"
+        py={4}
       >
         <Paper elevation={2} sx={{ p: 3, width: 320, maxWidth: 1200 }}>
           <Box textAlign="center" mb={2}>
             <Box display="flex" justifyContent="center" mb={1}>
               <Avatar
                 src="https://cdn-icons-png.flaticon.com/512/7858/7858230.png"
-                alt="Clínica Médica"
+                alt="The Heroes"
                 sx={{
                   width: AVATAR_SIZE,
                   height: AVATAR_SIZE,
@@ -29,7 +40,7 @@ const Home: React.FC = () => {
                 slotProps={{ img: { loading: "lazy" } }}
               />
             </Box>
-            <Typography variant="h5" component="h1" fontWeight={600} mb={2}>
+            <Typography variant="h5" component="h2" fontWeight={600} mb={2}>
               Meu Time
             </Typography>
             <Button
@@ -74,8 +85,32 @@ const Home: React.FC = () => {
           </Box>
         </Paper>
       </Box>
+
+      {/* Rodapé */}
+      <Box
+        component="footer"
+        sx={{
+          py: 2.5,
+          px: 2,
+          mt: "auto",
+          backgroundColor: (theme) =>
+            theme.palette.mode === "light" ? theme.palette.grey[200] : theme.palette.grey[800],
+        }}
+      >
+        <Container maxWidth="lg">
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Typography variant="body2" color="text.secondary">
+              © {new Date().getFullYear()} The Heroes
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Sistema de Gerenciamento de Times de Futebol
+            </Typography>
+          </Box>
+        </Container>
+      </Box>
     </Box>
   );
 };
 
 export default Home;
+

@@ -5,19 +5,16 @@ import {
   Box,
   Paper,
   Typography,
-  IconButton,
   Button,
   Snackbar,
   Alert,
   TextField,
 } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate } from "react-router-dom";
 import JogadoresTable from "./JogadoresTable";
 import EditarJogadorModal from "./EditarJogadorModal";
 import CriarJogadorModal from "./CriarJogadorModal";
 import StatJogadorModal from "./StatJogadorModal";
-import UserHeader from "./UserHeader";
+import DashboardLayout from "./DashboardLayout";
 
 type SnackbarState = {
   open: boolean;
@@ -26,8 +23,6 @@ type SnackbarState = {
 };
 
 const Jogadores: React.FC = () => {
-  const navigate = useNavigate();
-
   const [jogadores, setJogadores] = useState<Jogador[]>([]);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -106,13 +101,8 @@ const Jogadores: React.FC = () => {
   };
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" minHeight="100vh" bgcolor="background.default" p={3}>
-      <UserHeader />
-      <Paper elevation={3} sx={(theme) => ({ width: "100%", maxWidth: 1200, p: 3, position: "relative", bgcolor: theme.palette.mode === "dark" ? "#242424" : "background.paper", color: theme.palette.text.primary, borderRadius: 2 })}>
-        <IconButton aria-label="voltar" onClick={() => navigate("/home")} size="small" sx={{ position: "absolute", left: 16, top: 16 }}>
-          <ArrowBackIcon fontSize="small" />
-        </IconButton>
-
+    <DashboardLayout>
+      <Paper elevation={3} sx={(theme) => ({ width: "100%", maxWidth: 1200, mx: "auto", p: 3, bgcolor: theme.palette.mode === "dark" ? "#242424" : "background.paper", color: theme.palette.text.primary, borderRadius: 2 })}>
         <Typography variant="h5" fontWeight={600} mb={3} textAlign="center">Lista de Jogadores</Typography>
 
         <TextField
@@ -141,7 +131,7 @@ const Jogadores: React.FC = () => {
       <EditarJogadorModal open={jogadorEditando !== null} jogador={jogadorEditando} onClose={handleCloseEditModal} onSave={handleSaveJogador} />
       <CriarJogadorModal open={openCriarModal} onClose={() => setOpenCriarModal(false)} onSave={handleSaveNovoJogador} />
       <StatJogadorModal open={jogadorStats !== null} jogador={jogadorStats} onClose={() => setJogadorStats(null)} />
-    </Box>
+    </DashboardLayout>
   );
 };
 

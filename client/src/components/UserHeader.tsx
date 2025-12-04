@@ -55,8 +55,9 @@ const UserHeader: React.FC = () => {
         onClick={handleMenuOpen}
         sx={{
           cursor: "pointer",
-          bgcolor: "primary.main",
+          bgcolor: "#FF6B35",
           fontWeight: 600,
+          color: "white",
           "&:hover": {
             opacity: 0.8,
           },
