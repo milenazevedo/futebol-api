@@ -1,8 +1,9 @@
 import axios from "axios";
 import { Escalacao } from "../types/escalacao";
+import { API_BASE } from "../config/api";
 
 export async function getEscalacoes(): Promise<Escalacao[]> {
-  const response = await axios.get<Escalacao[]>("/api/escalacoes");
+  const response = await axios.get<Escalacao[]>(`${API_BASE}/escalacoes`);
   return response.data;
 }
 
@@ -11,7 +12,7 @@ export async function createEscalacao(dados: {
   partidaId: number;
   timeId: number;
 }): Promise<Escalacao> {
-  const response = await axios.post<Escalacao>("/api/escalacoes", dados);
+  const response = await axios.post<Escalacao>(`${API_BASE}/escalacoes`, dados);
   return response.data;
 }
 
@@ -23,10 +24,10 @@ export async function updateEscalacao(
     timeId: number;
   }
 ): Promise<Escalacao> {
-  const response = await axios.put<Escalacao>(`/api/escalacoes/${id}`, dados);
+  const response = await axios.put<Escalacao>(`${API_BASE}/escalacoes/${id}`, dados);
   return response.data;
 }
 
 export async function deleteEscalacao(id: number): Promise<void> {
-  await axios.delete(`/api/escalacoes/${id}`);
+  await axios.delete(`${API_BASE}/escalacoes/${id}`);
 }

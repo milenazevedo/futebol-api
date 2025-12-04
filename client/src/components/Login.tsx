@@ -15,6 +15,7 @@ import { z } from "zod";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import { styled } from "@mui/material/styles";
+import { API_BASE } from "../config/api";
 
 // ===================================================================
 // ESTILIZAÇÃO NEON (A única parte nova)
@@ -191,7 +192,7 @@ function Login() {
 
   const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const url: string = "/api/auth/register";
+    const url: string = `${API_BASE}/auth/register`;
     setIsLoading(true);
     try {
       const response = await axios.post(url, { email: email, senha: password, nome: nome });
@@ -207,7 +208,7 @@ function Login() {
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const url: string = "/api/login";
+    const url: string = `${API_BASE}/login`;
     setIsLoading(true);
     try {
       const response = await axios.post(url, { email: email, senha: password });

@@ -1,7 +1,6 @@
 import axios from "axios";
 import type { Jogador } from "../types/jogador";
-
-const API_BASE = "/api";
+import { API_BASE } from "../config/api";
 
 export const getJogadores = async (): Promise<Jogador[]> => {
   const res = await axios.get<Jogador[]>(`${API_BASE}/jogadores`);
