@@ -162,14 +162,13 @@ function Login() {
 
   const validateEmail = (email: string): { isValid: boolean; message: string } => {
     if (!email.trim()) return { isValid: false, message: "Email é obrigatório" };
-    const resultado = emailSchema.safeParse(email);
-    return { isValid: resultado.success, message: resultado.success ? "" : "Email inválido" };
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return { isValid: emailRegex.test(email), message: emailRegex.test(email) ? "" : "Email inválido" };
   };
 
   const validatePassword = (password: string): { isValid: boolean; message: string } => {
     if (!password.trim()) return { isValid: false, message: "Senha é obrigatória" };
-    const resultado = passwordSchema.safeParse(password);
-    return { isValid: resultado.success, message: resultado.success ? "" : "Senha com menos de 4 caracteres" };
+    return { isValid: password.length >= 4, message: password.length >= 4 ? "" : "Senha com menos de 4 caracteres" };
   };
 
   const validateNome = (nome: string): { isValid: boolean; message: string } => {
