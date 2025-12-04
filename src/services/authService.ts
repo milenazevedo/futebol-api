@@ -23,7 +23,7 @@ export const registerUser = async (
   }
 
   // Check if email already exists
-  const existingUser = await prisma.Usuario.findUnique({
+  const existingUser = await prisma.usuario.findUnique({
     where: { email },
   });
 
@@ -35,7 +35,7 @@ export const registerUser = async (
   const hashedPassword = await bcrypt.hash(senha, 10);
 
   // Create user
-  const usuario = await prisma.Usuario.create({
+  const usuario = await prisma.usuario.create({
     data: {
       email,
       senha: hashedPassword,
@@ -65,7 +65,7 @@ export const loginUser = async (email: string, senha: string) => {
   }
 
   // Find user by email
-  const usuario = await prisma.Usuario.findUnique({
+  const usuario = await prisma.usuario.findUnique({
     where: { email },
   });
 
