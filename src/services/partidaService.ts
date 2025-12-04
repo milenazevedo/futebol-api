@@ -15,6 +15,39 @@ export async function getAll(): Promise<Partida[]> {
   });
 }
 
+export async function getFutureMatches(): Promise<Partida[]> {
+  // Busca apenas partidas futuras (data > agora)
+  const now = new Date();
+  return prisma.partida.findMany({
+    where: {
+      data: {
+        gt: now,
+      },
+    },
+    include: { mandante: true, visitante: true },
+    orderBy: { data: 'asc' },
+  });
+}
+
+export async function getStats(): Promise<any> {
+  // Retorna estatísticas básicas de partidas
+  const totalPartidas = await prisma.partida.count();
+  const futureCount = await prisma.partida.count({
+    where: {
+      data: {
+        gt: new Date(),
+      },
+    },
+  });
+  const pastCount = totalPartidas - futureCount;
+
+  return {
+    totalPartidas,
+    futureCount,
+    pastCount,
+  };
+}
+
 export async function getById(id: number): Promise<Partida | null> {
   // Busca uma partida específica pelo ID incluindo dados dos times
   return prisma.partida.findUnique({

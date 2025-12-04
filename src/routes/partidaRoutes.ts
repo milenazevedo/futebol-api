@@ -27,24 +27,29 @@ router.get("/", partidaController.getAllPartidas);
 
 /**
  * @swagger
- * /partidas/{id}:
+ * /partidas/futuras:
  *   get:
- *     summary: Retorna uma partida pelo ID
+ *     summary: Retorna apenas partidas futuras
  *     tags: [Partidas]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
  *     responses:
  *       200:
- *         description: Partida encontrada
- *       404:
- *         description: Partida não encontrada
+ *         description: Lista de partidas futuras
  */
-// ROTA: GET /api/partidas/:id - Busca partida por ID
-router.get("/:id", validateParams(idParamSchema), partidaController.getPartidaById);
+// ROTA: GET /api/partidas/futuras - Lista partidas futuras
+router.get("/futuras", partidaController.getFuturePartidas);
+
+/**
+ * @swagger
+ * /partidas/stats:
+ *   get:
+ *     summary: Retorna estatísticas de partidas
+ *     tags: [Partidas]
+ *     responses:
+ *       200:
+ *         description: Estatísticas de partidas
+ */
+// ROTA: GET /api/partidas/stats - Estatísticas de partidas
+router.get("/stats", partidaController.getPartidaStats);
 
 /**
  * @swagger
@@ -74,6 +79,27 @@ router.get("/:id", validateParams(idParamSchema), partidaController.getPartidaBy
  */
 // ROTA: POST /api/partidas - Cria nova partida
 router.post("/", validateBody(createPartidaSchema), partidaController.createPartida);
+
+/**
+ * @swagger
+ * /partidas/{id}:
+ *   get:
+ *     summary: Retorna uma partida pelo ID
+ *     tags: [Partidas]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Partida encontrada
+ *       404:
+ *         description: Partida não encontrada
+ */
+// ROTA: GET /api/partidas/:id - Busca partida por ID
+router.get("/:id", validateParams(idParamSchema), partidaController.getPartidaById);
 
 /**
  * @swagger

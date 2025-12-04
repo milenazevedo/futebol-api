@@ -4,6 +4,7 @@ import jogadorRoutes from "./jogadorRoutes";
 import partidaRoutes from "./partidaRoutes";
 import escalacaoRoutes from "./escalacaoRoutes";
 import healthRoutes from "./healthRoutes";
+import authRoutes from "./authRoutes";
 
 const router = Router();
 
@@ -13,6 +14,10 @@ router.use("/times", timeRoutes);
 
 // Rotas de jogadores: /api/jogadores
 router.use("/jogadores", jogadorRoutes);
+
+// Rotas de autenticação: /api/auth/login, /api/auth/register, /api/login (backward compat)
+router.use("/auth", authRoutes);
+router.use("/login", authRoutes);
 
 // Rotas de partidas: /api/partidas
 router.use("/partidas", partidaRoutes);

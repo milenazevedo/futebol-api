@@ -32,100 +32,91 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteTime = exports.updateTime = exports.getTimeById = exports.getAllTimes = exports.createTime = void 0;
 const timeService = __importStar(require("../services/timeService"));
 const validation_1 = require("../schemas/validation");
 // CONTROLLER: Lida com as requisições HTTP para Times
-const createTime = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createTime = async (req, res) => {
     try {
         // Valida os dados do body usando Zod
         const payload = validation_1.createTimeSchema.parse(req.body);
         // Chama o serviço para criar o time
-        const novo = yield timeService.create(payload);
+        const novo = await timeService.create(payload);
         // Retorna resposta 201 (Created) com o time criado
         return res.status(201).json(novo);
     }
     catch (error) {
         // Se for erro de validação Zod, retorna 400
         if (error.errors)
-            return res.status(400).json({ errors: error.errors });
+            return res.status(400).json({ erros: error.errors });
         // Outros erros retornam 500
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ mensagem: error.message });
     }
-});
+};
 exports.createTime = createTime;
-const getAllTimes = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllTimes = async (_req, res) => {
     try {
         // Busca todos os times
-        const lista = yield timeService.getAll();
+        const lista = await timeService.getAll();
         // Retorna a lista de times (status 200 padrão)
         return res.json(lista);
     }
     catch (error) {
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ mensagem: error.message });
     }
-});
+};
 exports.getAllTimes = getAllTimes;
-const getTimeById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getTimeById = async (req, res) => {
     try {
         // Valida o ID nos parâmetros da URL
         const { id } = validation_1.idParamSchema.parse(req.params);
         // Busca o time pelo ID
-        const time = yield timeService.getById(id);
+        const time = await timeService.getById(id);
         // Se time não foi encontrado, retorna 404
         if (!time)
-            return res.status(404).json({ message: "Time não encontrado" });
+            return res.status(404).json({ mensagem: "Time não encontrado" });
         // Retorna o time encontrado
         return res.json(time);
     }
     catch (error) {
         if (error.errors)
-            return res.status(400).json({ errors: error.errors });
-        return res.status(500).json({ message: error.message });
+            return res.status(400).json({ erros: error.errors });
+        return res.status(500).json({ mensagem: error.message });
     }
-});
+};
 exports.getTimeById = getTimeById;
-const updateTime = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateTime = async (req, res) => {
     try {
         // Valida o ID e os dados do body
         const { id } = validation_1.idParamSchema.parse(req.params);
         const payload = validation_1.updateTimeSchema.parse(req.body);
         // Chama o serviço para atualizar
-        const atualizado = yield timeService.update(id, payload);
+        const atualizado = await timeService.update(id, payload);
         return res.json(atualizado);
     }
     catch (error) {
         if (error.errors)
-            return res.status(400).json({ errors: error.errors });
+            return res.status(400).json({ erros: error.errors });
         // Erro específico do Prisma quando registro não existe
         if (error.code === "P2025")
-            return res.status(404).json({ message: "Time não encontrado" });
-        return res.status(500).json({ message: error.message });
+            return res.status(404).json({ mensagem: "Time não encontrado" });
+        return res.status(500).json({ mensagem: error.message });
     }
-});
+};
 exports.updateTime = updateTime;
-const deleteTime = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteTime = async (req, res) => {
     try {
         const { id } = validation_1.idParamSchema.parse(req.params);
         // Remove o time
-        yield timeService.remove(id);
+        await timeService.remove(id);
         // Retorna 204 (No Content) - sucesso sem conteúdo na resposta
         return res.status(204).send();
     }
     catch (error) {
         if (error.code === "P2025")
-            return res.status(404).json({ message: "Time não encontrado" });
-        return res.status(500).json({ message: error.message });
+            return res.status(404).json({ mensagem: "Time não encontrado" });
+        return res.status(500).json({ mensagem: error.message });
     }
-});
+};
 exports.deleteTime = deleteTime;

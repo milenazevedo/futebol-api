@@ -8,6 +8,7 @@ const timeRoutes_1 = __importDefault(require("./timeRoutes"));
 const jogadorRoutes_1 = __importDefault(require("./jogadorRoutes"));
 const partidaRoutes_1 = __importDefault(require("./partidaRoutes"));
 const escalacaoRoutes_1 = __importDefault(require("./escalacaoRoutes"));
+const healthRoutes_1 = __importDefault(require("./healthRoutes"));
 const router = (0, express_1.Router)();
 // CONFIGURAÇÃO DAS ROTAS PRINCIPAIS DA API
 // Todas as rotas de times começam com /api/times
@@ -18,4 +19,6 @@ router.use("/jogadores", jogadorRoutes_1.default);
 router.use("/partidas", partidaRoutes_1.default);
 // Rotas de escalações: /api/escalacoes
 router.use("/escalacoes", escalacaoRoutes_1.default);
+// Health check: /api/health
+router.use("/health", healthRoutes_1.default);
 exports.default = router;
