@@ -11,8 +11,25 @@ import Escalacoes from "./components/Escalacoes";
 import { AuthProvider } from "./contexts/AuthContext";
 
 function App() {
-  const [mode, setMode] = useState<"light" | "dark">("light");
-  const theme = createTheme({ palette: { mode } });
+  const [mode, setMode] = useState<"light" | "dark">("dark");
+  
+  const theme = createTheme({
+    palette: {
+      mode,
+      ...(mode === "dark" && {
+        background: {
+          default: "#0a0a0a",
+          paper: "#121212",
+        },
+        primary: {
+          main: "#1976d2",
+        },
+        success: {
+          main: "#1ab454",
+        },
+      }),
+    },
+  });
 
   const toggleColorMode = () =>
     setMode((prev) => (prev === "light" ? "dark" : "light"));

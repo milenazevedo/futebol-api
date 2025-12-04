@@ -16,12 +16,11 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
 import EscalacoesTable from "./EscalacoesTable";
 import EditarEscalacaoModal from "./EditarEscalacaoModal";
 import CriarEscalacaoModal from "./CriarEscalacaoModal";
-import UserHeader from "./UserHeader";
+import DashboardLayout from "./DashboardLayout";
 
 type SnackbarState = {
   open: boolean;
@@ -30,8 +29,6 @@ type SnackbarState = {
 };
 
 const Escalacoes: React.FC = () => {
-  const navigate = useNavigate();
-
   const [escalacoes, setEscalacoes] = useState<Escalacao[]>([]);
   const [jogadores, setJogadores] = useState<Jogador[]>([]);
   const [partidas, setPartidas] = useState<Partida[]>([]);
@@ -110,13 +107,8 @@ const Escalacoes: React.FC = () => {
   };
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" minHeight="100vh" bgcolor="background.default" p={3}>
-      <UserHeader />
-      <Paper elevation={3} sx={(theme) => ({ width: "100%", maxWidth: 1200, p: 3, position: "relative", bgcolor: theme.palette.mode === "dark" ? "#242424" : "background.paper", color: theme.palette.text.primary, borderRadius: 2 })}>
-        <IconButton aria-label="voltar" onClick={() => navigate("/home")} size="small" sx={{ position: "absolute", left: 16, top: 16 }}>
-          <ArrowBackIcon fontSize="small" />
-        </IconButton>
-
+    <DashboardLayout>
+      <Paper elevation={3} sx={(theme) => ({ width: "100%", maxWidth: 1200, p: 3, bgcolor: theme.palette.mode === "dark" ? "#242424" : "background.paper", color: theme.palette.text.primary, borderRadius: 2 })}>
         <Typography variant="h5" fontWeight={600} mb={3} textAlign="center">Lista de Escalações</Typography>
 
         <EscalacoesTable escalacoes={escalacoes} deletingId={deletingId} onDelete={handleDelete} onEdit={handleOpenEditModal} />
@@ -134,7 +126,7 @@ const Escalacoes: React.FC = () => {
 
       <EditarEscalacaoModal open={escalacaoEditando !== null} escalacao={escalacaoEditando} onClose={handleCloseEditModal} onSave={handleSaveEscalacao} jogadores={jogadores} partidas={partidas} times={times} />
       <CriarEscalacaoModal open={openCriarModal} onClose={() => setOpenCriarModal(false)} onSave={handleSaveNovaEscalacao} jogadores={jogadores} partidas={partidas} times={times} />
-    </Box>
+    </DashboardLayout>
   );
 };
 

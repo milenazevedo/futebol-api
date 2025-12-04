@@ -25,16 +25,19 @@ import {
   Card,
   CardContent,
   Grid,
+  MenuItem,
 } from "@mui/material";
-import { ArrowBack, Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material";
+import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material";
 import axios from "axios";
 import { Partida } from "../types/partida";
+import type { Time } from "../types/time";
 import { getPartidas, getFuturePartidas, getPartidaStats } from "../services/partidaService";
-import UserHeader from "./UserHeader";
+import { getTimes } from "../services/timeService";
+import DashboardLayout from "./DashboardLayout";
 
 function Partidas() {
-  const navigate = useNavigate();
   const [partidas, setPartidas] = useState<Partida[]>([]);
+  const [times, setTimes] = useState<Time[]>([]);
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState<"todas" | "futuras">("todas");
   const [stats, setStats] = useState<any>(null);
@@ -56,11 +59,21 @@ function Partidas() {
   useEffect(() => {
     loadPartidas();
     loadStats();
+    loadTimes();
   }, []);
 
   useEffect(() => {
     loadPartidas();
   }, [filtro]);
+
+  const loadTimes = async () => {
+    try {
+      const data = await getTimes();
+      setTimes(data);
+    } catch (error: any) {
+      console.error("Erro ao carregar times:", error);
+    }
+  };
 
   const loadPartidas = async () => {
     try {
@@ -178,13 +191,8 @@ function Partidas() {
   };
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" minHeight="100vh" bgcolor="background.default" p={3}>
-      <UserHeader />
-      <Paper elevation={3} sx={(theme) => ({ width: "100%", maxWidth: 1200, p: 3, position: "relative", bgcolor: theme.palette.mode === "dark" ? "#242424" : "background.paper", color: theme.palette.text.primary, borderRadius: 2 })}>
-        <IconButton aria-label="voltar" onClick={() => navigate("/home")} size="small" sx={{ position: "absolute", left: 16, top: 16 }}>
-          <ArrowBack fontSize="small" />
-        </IconButton>
-
+    <DashboardLayout>
+      <Paper elevation={3} sx={(theme) => ({ width: "100%", maxWidth: 1200, mx: "auto", p: 3, bgcolor: theme.palette.mode === "dark" ? "#242424" : "background.paper", color: theme.palette.text.primary, borderRadius: 2 })}>
         <Typography variant="h5" fontWeight={600} mb={3} textAlign="center">
           Lista de Partidas
         </Typography>
@@ -342,23 +350,43 @@ function Partidas() {
               placeholder="Ex: Estádio do Morumbi"
             />
             <TextField
-              label="Time Mandante (ID)"
-              type="number"
+              select
+              label="Time Mandante"
               name="mandanteId"
               value={formData.mandanteId}
               onChange={handleInputChange}
               fullWidth
-              placeholder="ID do time mandante"
-            />
+              placeholder="Selecione o time mandante"
+            >
+              {times.length === 0 ? (
+                <MenuItem disabled>Carregando times...</MenuItem>
+              ) : (
+                times.map((time) => (
+                  <MenuItem key={time.id} value={time.id}>
+                    {time.nome}
+                  </MenuItem>
+                ))
+              )}
+            </TextField>
             <TextField
-              label="Time Visitante (ID)"
-              type="number"
+              select
+              label="Time Visitante"
               name="visitanteId"
               value={formData.visitanteId}
               onChange={handleInputChange}
               fullWidth
-              placeholder="ID do time visitante"
-            />
+              placeholder="Selecione o time visitante"
+            >
+              {times.length === 0 ? (
+                <MenuItem disabled>Carregando times...</MenuItem>
+              ) : (
+                times.map((time) => (
+                  <MenuItem key={time.id} value={time.id}>
+                    {time.nome}
+                  </MenuItem>
+                ))
+              )}
+            </TextField>
           </Box>
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
@@ -382,7 +410,7 @@ function Partidas() {
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </DashboardLayout>
   );
 }
 

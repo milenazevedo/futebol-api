@@ -10,29 +10,16 @@ body {
   position: relative;
 }
 
-body::before,
-body::after {
+body::before {
   content: '';
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(90px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse 500px 300px at 20% 50%, rgba(26, 180, 84, 0.05) 0%, transparent 80%),
+              radial-gradient(ellipse 400px 400px at 80% 80%, rgba(26, 180, 84, 0.03) 0%, transparent 85%);
+  pointer-events: none;
   z-index: -1;
 }
 
-body::before {
-  width: 500px;
-  height: 500px;
-  background-color: #39FF14; /* Verde Neon principal */
-  top: -200px;
-  right: -200px;
-  opacity: 0.4;
-}
-
-body::after {
-  width: 600px;
-  height: 600px;
-  background-color: #00ff88; /* Tom de verde variado */
-  bottom: -250px;
-  left: -250px;
-  opacity: 0.3;
-}
