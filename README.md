@@ -25,7 +25,7 @@ Uma API REST completa para gerenciamento de times de futebol, jogadores, partida
 - **Swagger** – documentação interativa da API
 - **Docker** + **Docker Compose** – containerização completa
 
-## 🚀 Como Rodar a Aplicação
+## 🚀 Como Rodar a Aplicação (Docker Recomendado)
 
 ### 📋 Pré-requisitos
 

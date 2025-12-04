@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv";
 
+
 // Carrega variáveis de ambiente aqui também para garantir que, mesmo que
 // algum módulo importe o Prisma antes de `src/index.ts`, o .env seja lido.
 dotenv.config();
@@ -22,3 +23,4 @@ export { prisma };
 
 // Exporta a instância do Prisma para ser usada em outros arquivos
 export default prisma;
+
